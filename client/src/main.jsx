@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import About from './About.jsx';
 import App from './App.jsx';
-import ErrorPage from './components/ui/ErrorPage.jsx';
 import './index.css';
+
+import ErrorPage from './components/ui/ErrorPage.jsx';
+
 import HomeScreen from './screens/HomeScreen.jsx';
 
 const router = createBrowserRouter([
@@ -13,15 +14,19 @@ const router = createBrowserRouter([
     path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
-    loader: () => import('./App.jsx'),
     children: [
       {
         path: '/',
         element: <HomeScreen />,
       },
       {
-        path: '/about',
-        element: <About />,
+        path: '/profile',
+      },
+      {
+        path: '/gallery',
+      },
+      {
+        path: '/admin/dashboard',
       },
     ],
   },

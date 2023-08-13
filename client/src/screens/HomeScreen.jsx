@@ -5,6 +5,7 @@ import Webcam from 'react-webcam';
 function HomeScreen() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [shutterClosed, setShutterClosed] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
   const webcamRef = useRef(null);
 
