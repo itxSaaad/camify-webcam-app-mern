@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Button from '../ui/Button.jsx';
 
 const SideNav = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const isLoggedIn = true;
   const latestImage = 'https://picsum.photos/200/300';
@@ -78,22 +78,41 @@ const SideNav = () => {
       </aside>
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-0 right-0 text-white bg-gray-600 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 rounded-md m-4 md:hidden"
+        className={`fixed top-0 ${
+          isOpen ? 'right-40' : 'right-0'
+        } border-2 border-indigo-800 border-r-0 p-4 transition-all duration-300 transform rounded-l-full`}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h7"
-          />
-        </svg>
+        {isOpen ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h7"
+            />
+          </svg>
+        )}
       </Button>
     </>
   );
