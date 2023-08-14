@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom';
 function ImageListItem({ image, index }) {
   return (
     <>
-      <img src={image} alt="Gallery" className="w-full" />
+      <Link
+        to={`/gallery/${image._id}`}
+        className="p-1 border-2 border-transparent hover:border-indigo-500"
+      >
+        <img src={image} alt="Gallery" className="w-full" />
+      </Link>
       {index === 5 && (
         <Link
           to="/gallery"

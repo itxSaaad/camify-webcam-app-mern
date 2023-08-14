@@ -9,6 +9,8 @@ import ErrorPage from './components/ui/ErrorPage.jsx';
 
 import HomeScreen from './screens/HomeScreen.jsx';
 import ProfileScreen from './screens/ProfileScreen.jsx';
+import GalleryScreen from './screens/GalleryScreen.jsx';
+import ImageScreen from './screens/ImageScreen.jsx';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/gallery',
+        element: <GalleryScreen />,
+      },
+      {
+        path: '/gallery/:id',
+        element: <ImageScreen />,
       },
       {
         path: '/admin/dashboard',
