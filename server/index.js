@@ -10,6 +10,7 @@ const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
 // Import Routes
 const userRoutes = require('./routes/userRoutes');
+const captureRoutes = require('./routes/captureRoutes');
 
 // Configure DotEnv
 dotenv.config();
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/users', userRoutes);
+app.use('/api/captures', captureRoutes);
 
 // Configure Error Handlers
 app.use(notFound);

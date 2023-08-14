@@ -16,7 +16,7 @@ const {
   deleteUser,
   getUserById,
   updateUser,
-} = require('../controllers/userController');
+} = require('../controllers/userControllers');
 
 // Initialize Routes
 
