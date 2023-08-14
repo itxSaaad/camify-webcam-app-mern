@@ -8,6 +8,8 @@ const { protect, admin } = require('../middlewares/authMiddleware');
 
 // Import Controllers
 const {
+  getCaptureById,
+  updateCaptureById,
   getAllCaptures,
   deleteCapture,
 } = require('../controllers/captureControllers');
@@ -17,6 +19,10 @@ const {
 // Public Routes
 
 // Private Routes
+router
+  .route('/:id')
+  .get(protect, getCaptureById)
+  .put(protect, updateCaptureById);
 
 // Admin + Private Routes
 router.get('/', protect, admin, getAllCaptures);
