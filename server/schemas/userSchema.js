@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema(
       type: String,
     },
     avatar: {
-      type: Image,
+      type: String,
       default: 'https://avatars.dicebear.com/api/avataaars/1.svg',
     },
     isAdmin: {

@@ -4,8 +4,12 @@ const cors = require('cors');
 const colors = require('colors');
 const morgan = require('morgan');
 
+// Import Configs and Middlewares
 const connectDb = require('./config/db');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
+
+// Import Routes
+const userRoutes = require('./routes/userRoutes');
 
 // Configure DotEnv
 dotenv.config();
@@ -28,6 +32,8 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('API Is Runnig Perfectly!');
 });
+
+app.use('/api/users', userRoutes);
 
 // Configure Error Handlers
 app.use(notFound);
