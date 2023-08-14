@@ -106,8 +106,90 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
+
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+      password: user.password,
+      message: 'User Profile Fetched Successfully!',
+    });
+  } else {
+    res.status(404);
+    throw new Error('User Not Found!');
+  }
+});
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    let { name, email, password, confirmPassword } = req.body;
+
+    if (emailValidator.validate(req.body.email)) {
+      let match = false;
+
+      if (password !== '') {
+        match = await bcrypt.compare(password, user.password);
+      }
+
+      if (user.email === email && match) {
+        res.status(400);
+        throw new Error('You Have Not Made Any Changes!');
+      } else {
+        if (password !== '' && password !== confirmPassword) {
+          res.status(400);
+          throw new Error('Passwords Do Not Match!');
+        } else {
+          // Update only if the password is not an empty string
+          if (password !== '') {
+            const salt = await bcrypt.genSalt(Number(process.env.SALT));
+            const hashedPassword = await bcrypt.hash(password, salt);
+            user.password = hashedPassword;
+          }
+
+          user.name = name || user.name;
+          user.email = email || user.email;
+
+          const updatedUser = await user.save();
+
+          res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+            token: generateToken(updatedUser._id),
+            message: 'User Profile Updated Successfully!',
+          });
+        }
+      }
+    } else {
+      res.status(400);
+      throw new Error('Invalid Email Address!');
+    }
+  } else {
+    res.status(404);
+    throw new Error('User Not Found!');
+  }
+});
+
 // Export Controllers
 module.exports = {
   authUser,
   registerUser,
+  getUserProfile,
+  updateUserProfile,
 };

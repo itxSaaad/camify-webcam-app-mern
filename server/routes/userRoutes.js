@@ -7,11 +7,21 @@ const router = express.Router();
 const { protect, admin } = require('../middlewares/authMiddleware');
 
 // Import Controllers
-const { authUser, registerUser } = require('../controllers/userController');
+const {
+  authUser,
+  registerUser,
+  getUserProfile,
+  updateUserProfile,
+} = require('../controllers/userController');
 
 // Initialize Routes
 router.post('/login', authUser);
 router.post('/register', registerUser);
+
+router
+  .route('/profile')
+  .get(protect, getUserProfile)
+  .put(protect, updateUserProfile);
 
 // Export Router
 module.exports = router;
