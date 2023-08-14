@@ -19,7 +19,11 @@ const SideNav = () => {
         }`}
       >
         <div>
-          <Link to="/" className="flex items-center text-2xl font-bold mb-6">
+          <Link
+            to="/"
+            className="flex items-center text-2xl font-bold mb-6"
+            onClick={() => setIsOpen(!isOpen)}
+          >
             <h1>
               Camify <span className="text-sm text-gray-400">v1.0</span>
             </h1>
@@ -43,16 +47,21 @@ const SideNav = () => {
               <Link
                 to="/profile"
                 className="rounded-sm p-1 bg-gray-600 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1"
+                onClick={() => setIsOpen(!isOpen)}
               >
                 Profile
               </Link>
               <Link
                 to="/"
                 className="rounded-sm p-1 bg-gray-600 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1"
+                onClick={() => setIsOpen(!isOpen)}
               >
                 New Click
               </Link>
-              <Button className="bg-gray-900 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1 rounded-md">
+              <Button
+                className="bg-gray-900 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1 rounded-md"
+                onClick={() => setIsOpen(!isOpen)}
+              >
                 Logout
               </Button>
             </>
@@ -67,6 +76,7 @@ const SideNav = () => {
           <Link
             to="/gallery"
             className="block mb-6 rounded-md p-1 border-2 border-transparent hover:border-gray-500"
+            onClick={() => setIsOpen(!isOpen)}
           >
             <img
               src={latestImage}
