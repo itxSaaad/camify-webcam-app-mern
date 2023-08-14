@@ -12,16 +12,31 @@ const {
   registerUser,
   getUserProfile,
   updateUserProfile,
+  getAllUsers,
+  deleteUser,
+  getUserById,
+  updateUser,
 } = require('../controllers/userController');
 
 // Initialize Routes
+
+// Public Routes
 router.post('/login', authUser);
 router.post('/register', registerUser);
 
+// Private Routes
 router
   .route('/profile')
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
+
+// Admin + Private Routes
+router.get('/', protect, admin, getAllUsers);
+router.delete('/:id', protect, admin, deleteUser);
+router
+  .route('/profile/:id')
+  .get(protect, admin, getUserById)
+  .put(protect, admin, updateUser);
 
 // Export Router
 module.exports = router;
