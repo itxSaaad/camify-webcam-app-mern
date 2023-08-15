@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Button from '../ui/Button.jsx';
+import Button from '../ui/Button';
+import AuthModal from '../ui/Auth/AuthModal';
 
 const SideNav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const isLoggedIn = true;
   const latestImage = 'https://picsum.photos/200/300';
@@ -60,13 +62,20 @@ const SideNav = () => {
               </Link>
               <Button
                 className="bg-gray-900 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1 rounded-md"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                  setIsAuthModalOpen(true);
+                }}
               >
                 Logout
               </Button>
             </>
           ) : (
-            <Button variant="primary" className="rounded-md block mb-6">
+            <Button
+              variant="primary"
+              className="rounded-md block mb-6"
+              onClick={() => setIsAuthModalOpen(true)}
+            >
               Login / Register
             </Button>
           )}
@@ -124,6 +133,14 @@ const SideNav = () => {
           </svg>
         )}
       </Button>
+      {isAuthModalOpen && (
+        <AuthModal
+          onClose={() => {
+            setIsAuthModalOpen(false);
+            setIsOpen(false);
+          }}
+        />
+      )}
     </>
   );
 };

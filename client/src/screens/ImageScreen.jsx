@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BiArrowBack } from 'react-icons/bi';
+import { IoIosArrowBack } from 'react-icons/io';
 
 import Button from '../components/ui/Button';
 
@@ -15,7 +15,7 @@ function ImageScreen() {
           type="button"
           className="mb-4 rounded-lg shadow-lg flex flex-row items-center"
         >
-          <BiArrowBack className="mr-2" />
+          <IoIosArrowBack />
           Back
         </Button>
       </Link>

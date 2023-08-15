@@ -88,7 +88,7 @@ function AuthModal({ onClose }) {
 }
 
 AuthModal.propTypes = {
-  onClose: PropTypes.func.isRequigray,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default AuthModal;
