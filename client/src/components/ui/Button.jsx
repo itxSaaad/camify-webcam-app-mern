@@ -19,7 +19,7 @@ function Button({
       break;
     case 'outline':
       classes =
-        'bg-transparent hover:bg-indigo-600 text-md font-medium py-3 px-4 my-4 border-2 border-red-300 hover:border-indigo-700 text-red-500 hover:text-white transition-all duration-300';
+        'bg-transparent hover:bg-white text-md font-medium py-3 px-4 my-4 border-2 border-white hover:border-indigo-700 text-white hover:text-indigo-500 transition-all duration-300';
       break;
     case 'danger':
       classes =

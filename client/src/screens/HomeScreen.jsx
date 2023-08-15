@@ -2,6 +2,8 @@ import React, { useCallback, useRef, useState } from 'react';
 import { RiCameraLensFill, RiCameraLensLine } from 'react-icons/ri';
 import Webcam from 'react-webcam';
 
+import { dataURLToBlob } from '../utils/imageUtils';
+
 function HomeScreen() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [shutterClosed, setShutterClosed] = useState(false);
@@ -13,7 +15,11 @@ function HomeScreen() {
     setShutterClosed(true);
     setTimeout(() => {
       const imageSrc = webcamRef.current.getScreenshot();
-      setCapturedImage(imageSrc);
+      const blob = dataURLToBlob(imageSrc);
+
+      const convertedImage = URL.createObjectURL(blob);
+      console.log(convertedImage);
+      setCapturedImage(convertedImage);
       setShutterClosed(false);
     }, 300);
   }, [webcamRef]);

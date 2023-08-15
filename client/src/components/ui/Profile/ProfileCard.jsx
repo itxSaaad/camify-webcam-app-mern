@@ -10,7 +10,7 @@ const EditProfileForm = React.lazy(() => import('./EditProfileForm'));
 function ProfileCard({ user }) {
   const [isEditing, setIsEditing] = useState(false);
   return (
-    <aside className="bg-white h-full w-1/4 flex flex-col items-center justify-between rounded-lg shadow-lg p-4">
+    <aside className="bg-white sm:w-1/4 flex flex-col items-center justify-between rounded-lg shadow-lg p-4 mb-4 sm:mb-0">
       <Suspense fallback={<Loader />}>
         <h2 className="text-2xl font-bold">
           {isEditing ? 'Edit Profile' : 'Your Profile'}
