@@ -5,9 +5,11 @@ const router = express.Router();
 
 // Import Middlewares
 const { protect, admin } = require('../middlewares/authMiddleware');
+const upload = require('../middlewares/imageUploadMiddleware');
 
 // Import Controllers
 const {
+  createCapture,
   getCaptureById,
   updateCaptureById,
   getAllCaptures,
@@ -19,6 +21,9 @@ const {
 // Public Routes
 
 // Private Routes
+
+router.route('/').post(protect, upload.single('image'), createCapture);
+
 router
   .route('/:id')
   .get(protect, getCaptureById)

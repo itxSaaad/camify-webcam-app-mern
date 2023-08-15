@@ -5,6 +5,55 @@ const Capture = require('../schemas/captureSchema');
 
 // Initialize Controllers
 
+// @desc    Create a new Captured Image
+// @route   POST /api/captures/
+// @access  Private
+
+const createCapture = asyncHandler(async (req, res) => {
+  const user = req.user._id;
+
+  if (!req.file) {
+    res.status(400);
+    throw new Error('Please Upload an image');
+  }
+
+  // Upload the image buffer directly to Cloudinary using upload_stream
+  const cloudinaryResponse = await new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream((error, result) => {
+        if (error) {
+          res
+            .status(400)
+            .json({ error: 'Failed to upload image to Cloudinary' });
+          reject(error);
+          return;
+        }
+
+        // Successfully uploaded to Cloudinary
+        const idImage = result.secure_url;
+        resolve(idImage);
+      })
+      .end(req.file.buffer);
+  });
+
+  const capture = new Capture({
+    user,
+    image: cloudinaryResponse,
+  });
+
+  const createdCapture = await capture.save();
+
+  if (createdCapture) {
+    res.status(201).json({
+      message: 'Captured Image Successfully!',
+      capture: createdCapture,
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid Captured Image Data!');
+  }
+});
+
 // @desc    Get Captured Image by ID
 // @route   GET /api/captures/:id
 // @access  Private
@@ -72,6 +121,7 @@ const deleteCapture = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  createCapture,
   getCaptureById,
   updateCaptureById,
   getAllCaptures,

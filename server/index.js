@@ -1,7 +1,8 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
+const cloudinary = require('cloudinary').v2;
 const colors = require('colors');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const express = require('express');
 const morgan = require('morgan');
 
 // Import Configs and Middlewares
@@ -20,6 +21,13 @@ const app = express();
 
 // Connect Database
 connectDb();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Configure Middlewares
 if (process.env.NODE_ENV === 'development') {
