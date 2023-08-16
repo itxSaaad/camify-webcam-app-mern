@@ -1,9 +1,14 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import Button from '../Button';
 
+import { detailsUser, updateProfile } from '../../../redux/thunks/userThunks';
+
 function EditProfileForm({ user, setIsEditing }) {
+  const dispatch = useDispatch();
+
   const initialFormData = {
     name: user.name,
     email: user.email,
@@ -22,14 +27,17 @@ function EditProfileForm({ user, setIsEditing }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // dispatch(updateProfile(formData));
-    setIsEditing(false);
+    dispatch(updateProfile(formData)).then(() => {
+      setIsEditing(false);
+      dispatch(detailsUser);
+    });
   };
 
   const handleCancel = () => {
     setFormData(initialFormData);
     setIsEditing(false);
   };
+
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <div className="w-full my-4">

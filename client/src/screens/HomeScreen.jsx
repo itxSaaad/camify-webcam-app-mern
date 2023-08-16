@@ -73,11 +73,25 @@ function HomeScreen() {
           )}
         </>
       ) : (
-        <AuthModal
-          onClose={() => {
-            setIsAuthModalOpen(false);
-          }}
-        />
+        <>
+          {isAuthModalOpen ? (
+            <AuthModal
+              onClose={() => {
+                setIsAuthModalOpen(false);
+              }}
+            />
+          ) : (
+            <div className="text-white text-center">
+              <h1 className="text-3xl text-indigo-100 font-bold mb-2">
+                Welcome to
+              </h1>
+              <h1 className="text-5xl font-bold mb-2">Camify</h1>
+              <p className="text-xl text-indigo-300 font-medium mb-2">
+                Login to capture your moments!
+              </p>
+            </div>
+          )}
+        </>
       )}
     </section>
   );

@@ -1,41 +1,60 @@
-import PropTypes from 'prop-types';
-import React, { useState, Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../Button';
 import Loader from '../Loader';
+import Message from '../Message';
+
+import { detailsUser } from '../../../redux/thunks/userThunks';
 
 const Profile = React.lazy(() => import('./Profile'));
 const EditProfileForm = React.lazy(() => import('./EditProfileForm'));
 
-function ProfileCard({ user }) {
+function ProfileCard() {
   const [isEditing, setIsEditing] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+  const { loading, detailsUserError, userDetails, userInfo } = user;
+
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(detailsUser({}));
+    }
+  }, [dispatch, userInfo]);
+
   return (
     <aside className="bg-white sm:w-1/4 flex flex-col items-center justify-between rounded-lg shadow-lg p-4 mb-4 sm:mb-0">
       <Suspense fallback={<Loader />}>
-        <h2 className="text-2xl font-bold">
-          {isEditing ? 'Edit Profile' : 'Your Profile'}
-        </h2>
-        {isEditing ? (
-          <EditProfileForm user={user} setIsEditing={setIsEditing} />
+        {loading ? (
+          <Loader />
+        ) : detailsUserError ? (
+          <Message>{detailsUserError}</Message>
         ) : (
-          <Profile user={user} />
-        )}
-        {!isEditing && (
-          <Button
-            variant="primary"
-            className="rounded-lg"
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            Edit Profile
-          </Button>
+          <>
+            <h2 className="text-2xl font-bold">
+              {isEditing ? 'Edit Profile' : 'Your Profile'}
+            </h2>
+            {isEditing ? (
+              <EditProfileForm user={userDetails} setIsEditing={setIsEditing} />
+            ) : (
+              <Profile userInfo={userDetails} />
+            )}
+            {!isEditing && (
+              <Button
+                variant="primary"
+                className="rounded-lg"
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                Edit Profile
+              </Button>
+            )}
+          </>
         )}
       </Suspense>
     </aside>
   );
 }
-
-ProfileCard.propTypes = {
-  user: PropTypes.object.isRequired,
-};
 
 export default ProfileCard;
