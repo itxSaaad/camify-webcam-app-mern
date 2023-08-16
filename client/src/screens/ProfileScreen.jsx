@@ -31,7 +31,7 @@ function ProfileScreen() {
       {userInfo ? (
         <>
           <ProfileCard />
-          <ImageGalleryCard gallery={gallery} />
+          <ImageGalleryCard />
         </>
       ) : (
         <AuthModal

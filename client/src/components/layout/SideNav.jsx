@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -6,17 +6,32 @@ import { logout } from '../../redux/slices/userSlice';
 
 import Button from '../ui/Button';
 import AuthModal from '../ui/Auth/AuthModal';
+import { listCaptures } from '../../redux/thunks/captureThunks';
 
 const SideNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const latestImage = 'https://picsum.photos/200/300';
+  // const latestImage = 'https://picsum.photos/200/300';
 
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
+
+  const capture = useSelector((state) => state.capture);
+  const { captureList } = capture;
+
+  let latestImage = '';
+  if (captureList && captureList.length > 0) {
+    latestImage = captureList[captureList.length - 1];
+  }
+
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(listCaptures({}));
+    }
+  }, [dispatch, userInfo]);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -94,11 +109,17 @@ const SideNav = () => {
             className="block mb-6 rounded-md p-1 border-2 border-transparent hover:border-gray-500"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <img
-              src={latestImage}
-              alt="Latest Capture"
-              className="w-24 h-24 object-cover rounded-md"
-            />
+            {latestImage ? (
+              <img
+                src={latestImage}
+                alt="Latest Capture"
+                className="w-24 h-24 object-cover rounded-md"
+              />
+            ) : (
+              <div className="w-24 h-24 flex items-center justify-center bg-gray-400 rounded-md">
+                No captures yet
+              </div>
+            )}
           </Link>
         )}
       </aside>
