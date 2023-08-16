@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import { logout } from '../../redux/slices/userSlice';
 
 import Button from '../ui/Button';
 import AuthModal from '../ui/Auth/AuthModal';
@@ -8,10 +11,17 @@ const SideNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const isLoggedIn = true;
   const latestImage = 'https://picsum.photos/200/300';
-  const userAvatar = 'https://avatars.dicebear.com/api/avataaars/1.svg';
-  const userName = 'Jane Doe';
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+  const { userInfo } = user;
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>
@@ -32,19 +42,19 @@ const SideNav = () => {
           </Link>
         </div>
 
-        {isLoggedIn && (
+        {userInfo && (
           <div className="flex items-center mb-6">
             <img
-              src={userAvatar}
+              src={userInfo.avatar}
               alt="User Avatar"
               className="w-10 h-10 rounded-full mr-2"
             />
-            <p className="text-xl font-semibold">{userName}</p>
+            <p className="text-xl font-semibold">{userInfo.name}</p>
           </div>
         )}
 
         <div className="flex flex-col w-full text-center">
-          {isLoggedIn ? (
+          {userInfo ? (
             <>
               <Link
                 to="/profile"
@@ -62,10 +72,7 @@ const SideNav = () => {
               </Link>
               <Button
                 className="bg-gray-900 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1 rounded-md"
-                onClick={() => {
-                  setIsOpen(!isOpen);
-                  setIsAuthModalOpen(true);
-                }}
+                onClick={logoutHandler}
               >
                 Logout
               </Button>
@@ -81,7 +88,7 @@ const SideNav = () => {
           )}
         </div>
 
-        {isLoggedIn && (
+        {userInfo && (
           <Link
             to="/gallery"
             className="block mb-6 rounded-md p-1 border-2 border-transparent hover:border-gray-500"
@@ -133,7 +140,7 @@ const SideNav = () => {
           </svg>
         )}
       </Button>
-      {isAuthModalOpen && (
+      {!userInfo && isAuthModalOpen && (
         <AuthModal
           onClose={() => {
             setIsAuthModalOpen(false);

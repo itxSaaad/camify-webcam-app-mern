@@ -16,10 +16,10 @@ function Profile({ user }) {
         Your email is{' '}
         <span className="font-bold">
           <a
-            href="mailto:jane@example.com"
+            href={`mailto:${user.email}`}
             className="text-indigo-500 hover:text-indigo-600"
           >
-            jane@example.com
+            {user.email}
           </a>
         </span>
       </p>
