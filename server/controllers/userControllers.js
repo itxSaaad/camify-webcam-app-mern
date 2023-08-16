@@ -120,6 +120,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      avatar: user.avatar,
       password: user.password,
       message: 'User Profile Fetched Successfully!',
     });
