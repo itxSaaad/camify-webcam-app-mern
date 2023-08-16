@@ -22,7 +22,10 @@ const {
 
 // Private Routes
 
-router.route('/').post(protect, upload.single('image'), createCapture);
+router
+  .route('/')
+  .get(protect, getAllCaptures)
+  .post(protect, upload.single('image'), createCapture);
 
 router
   .route('/:id')
@@ -30,7 +33,6 @@ router
   .put(protect, updateCaptureById);
 
 // Admin + Private Routes
-router.get('/', protect, admin, getAllCaptures);
 router.delete('/:id', protect, admin, deleteCapture);
 
 // Export Router
