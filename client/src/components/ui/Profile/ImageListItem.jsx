@@ -1,12 +1,21 @@
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { getCaptureById } from '../../../redux/thunks/captureThunks';
+
 function ImageListItem({ image, index, totalImages }) {
+  const dispatch = useDispatch();
+
+  const handleImageClick = () => {
+    dispatch(getCaptureById(image._id));
+  };
+
   return (
     <>
-      <Link to={`/gallery/${image._id}`}>
+      <Link to={`/gallery/${image._id}`} onClick={handleImageClick}>
         <img
-          src={image}
+          src={image.imageUrl}
           alt="Gallery"
           className="p-1 rounded-lg border-2 border-transparent hover:border-indigo-500"
         />
@@ -24,7 +33,7 @@ function ImageListItem({ image, index, totalImages }) {
 }
 
 ImageListItem.propTypes = {
-  image: PropTypes.string.isRequired,
+  image: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   totalImages: PropTypes.number.isRequired,
 };

@@ -14,18 +14,6 @@ function ProfileScreen() {
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
 
-  const gallery = [
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-  ];
-
   return (
     <section className="bg-indigo-500 flex flex-col sm:flex-row justify-center items-center min-h-screen py-4 px-16">
       {userInfo ? (

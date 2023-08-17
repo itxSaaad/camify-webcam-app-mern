@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 import AuthModal from '../components/ui/Auth/AuthModal';
 import Loader from '../components/ui/Loader';
 import Message from '../components/ui/Message';
 
-import { listCaptures } from '../redux/thunks/captureThunks';
+import { getCaptureById } from '../redux/thunks/captureThunks';
 
 function GalleryScreen() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -20,30 +20,6 @@ function GalleryScreen() {
   const capture = useSelector((state) => state.capture);
   const { loading, captureListError, captureList } = capture;
 
-  useEffect(() => {
-    if (!captureList) {
-      dispatch(listCaptures({}));
-    }
-  }, [dispatch, captureList]);
-
-  const gallery = [
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-    'https://picsum.photos/300/200',
-  ];
   return (
     <section className="bg-indigo-500 flex flex-col justify-center items-center min-h-screen p-10">
       {userInfo ? (
@@ -64,14 +40,14 @@ function GalleryScreen() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-6 gap-4 mt-4">
-                {captureList.map((image, index) => (
+                {captureList.map((image) => (
                   <div
-                    key={index}
+                    key={image._id}
                     className="relative overflow-hidden rounded-lg"
                   >
                     <Link to={`/gallery/${image._id}`}>
                       <img
-                        src={image}
+                        src={image.imageUrl}
                         alt="Gallery"
                         className="p-1 rounded-lg border-2 border-transparent hover:border-indigo-500"
                       />

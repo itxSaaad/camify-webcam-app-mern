@@ -14,7 +14,7 @@ function ImageGalleryCard() {
     latestImage = captureList[captureList.length - 1];
   }
   return (
-    <aside className="bg-white sm:w-3/4 rounded-lg shadow-lg p-4 sm:ml-4">
+    <aside className="bg-white w-full sm:w-3/4 rounded-lg shadow-lg p-4 sm:ml-4">
       <h2 className="text-2xl font-bold">Photos</h2>
       <p className="text-gray-600">
         You have <span className="font-bold">{captureList.length}</span> photos
@@ -33,14 +33,14 @@ function ImageGalleryCard() {
         </div>
       ) : (
         <>
-          <p className="text-gray-600">
+          <p className="text-gray-600 break-all">
             Your latest photo is{' '}
             <span className="font-bold">
               <a
-                href={latestImage}
+                href={latestImage.imageUrl}
                 className="text-indigo-500 hover:text-indigo-600"
               >
-                {latestImage}
+                {latestImage.imageUrl}
               </a>
             </span>
           </p>
