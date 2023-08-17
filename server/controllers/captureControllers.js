@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const cloudinary = require('cloudinary').v2;
 
 // Import Schema
 const Capture = require('../schemas/captureSchema');
@@ -30,15 +31,15 @@ const createCapture = asyncHandler(async (req, res) => {
         }
 
         // Successfully uploaded to Cloudinary
-        const idImage = result.secure_url;
-        resolve(idImage);
+        const imageURL = result.secure_url;
+        resolve(imageURL);
       })
       .end(req.file.buffer);
   });
 
   const capture = new Capture({
     user,
-    image: cloudinaryResponse,
+    imageUrl: cloudinaryResponse,
   });
 
   const createdCapture = await capture.save();
@@ -46,7 +47,11 @@ const createCapture = asyncHandler(async (req, res) => {
   if (createdCapture) {
     res.status(201).json({
       message: 'Captured Image Successfully!',
-      capture: createdCapture,
+      _id: createdCapture._id,
+      user: createdCapture.user,
+      imageUrl: createdCapture.imageUrl,
+      createdAt: createdCapture.createdAt,
+      updatedAt: createdCapture.updatedAt,
     });
   } else {
     res.status(400);
