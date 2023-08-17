@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { RiCameraLensFill, RiCameraLensLine } from 'react-icons/ri';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Webcam from 'react-webcam';
 
-import { dataURLToBlob } from '../utils/imageUtils';
 import AuthModal from '../components/ui/Auth/AuthModal';
+import Loader from '../components/ui/Loader';
+import Message from '../components/ui/Message';
+
+import { dataURLToBlob } from '../utils/imageUtils';
+
+import { createCapture, listCaptures } from '../redux/thunks/captureThunks';
 
 function HomeScreen() {
   const [capturedImage, setCapturedImage] = useState(null);
@@ -12,22 +18,23 @@ function HomeScreen() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
   const webcamRef = useRef(null);
+  const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
+
+  const capture = useSelector((state) => state.capture);
+  const { loading, captureInfo, captureInfoSuccess, captureInfoError } =
+    capture;
 
   const captureImage = useCallback(() => {
     setShutterClosed(true);
     setTimeout(() => {
       const imageSrc = webcamRef.current.getScreenshot();
       const blob = dataURLToBlob(imageSrc);
-
-      const convertedImage = URL.createObjectURL(blob);
-      console.log(convertedImage);
-      setCapturedImage(convertedImage);
-      setShutterClosed(false);
+      dispatch(createCapture(blob));
     }, 300);
-  }, [webcamRef]);
+  }, [webcamRef, dispatch]);
 
   useEffect(() => {
     if (!userInfo) {
@@ -36,6 +43,14 @@ function HomeScreen() {
       setIsAuthModalOpen(false);
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    if (captureInfoSuccess) {
+      setCapturedImage(captureInfo?.imageUrl);
+      dispatch(listCaptures({}));
+      setShutterClosed(false);
+    }
+  }, [captureInfoSuccess, captureInfo, dispatch]);
 
   return (
     <section className="h-screen bg-indigo-500 flex flex-col-reverse sm:flex-row justify-evenly items-center p-7 sm:pr-56 sm:pl-24">
@@ -57,6 +72,7 @@ function HomeScreen() {
               <RiCameraLensLine size={80} />
             )}
           </button>
+          {captureInfoError && <Message>{captureInfoError}</Message>}
           {capturedImage ? (
             <img
               src={capturedImage}
@@ -64,12 +80,19 @@ function HomeScreen() {
               className="border-2 border-indigo-800 rounded-xl shadow-xl p-1"
             />
           ) : (
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              className="border-2 border-indigo-800 rounded-xl shadow-xl p-1"
-            />
+            <div className="relative">
+              {loading && (
+                <div className="absolute inset-0 bg-indigo-500 bg-opacity-25 flex items-center justify-center">
+                  <Loader />
+                </div>
+              )}
+              <Webcam
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                className="border-2 border-indigo-800 rounded-xl shadow-xl p-1"
+              />
+            </div>
           )}
         </>
       ) : (

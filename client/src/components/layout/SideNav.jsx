@@ -111,7 +111,7 @@ const SideNav = () => {
           >
             {latestImage ? (
               <img
-                src={latestImage}
+                src={latestImage.imageUrl}
                 alt="Latest Capture"
                 className="w-24 h-24 object-cover rounded-md"
               />
