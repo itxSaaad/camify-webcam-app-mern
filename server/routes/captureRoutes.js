@@ -30,10 +30,10 @@ router
 router
   .route('/:id')
   .get(protect, getCaptureById)
-  .put(protect, updateCaptureById);
+  .put(protect, updateCaptureById)
+  .delete(protect, deleteCapture);
 
 // Admin + Private Routes
-router.delete('/:id', protect, admin, deleteCapture);
 
 // Export Router
 module.exports = router;

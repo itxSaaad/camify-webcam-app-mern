@@ -45,7 +45,12 @@ function GalleryScreen() {
                     key={image._id}
                     className="relative overflow-hidden rounded-lg"
                   >
-                    <Link to={`/gallery/${image._id}`}>
+                    <Link
+                      to={`/gallery/${image._id}`}
+                      onClick={() => {
+                        dispatch(getCaptureById(image._id));
+                      }}
+                    >
                       <img
                         src={image.imageUrl}
                         alt="Gallery"

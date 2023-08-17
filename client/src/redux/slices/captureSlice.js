@@ -10,7 +10,7 @@ import {
 
 const initialState = {
   captureInfo: null,
-  captureInfoByID: null,
+  captureInfoById: null,
   captureList: [],
   captureInfoError: null,
   captureInfoByIdError: null,
@@ -48,7 +48,7 @@ const captureSlice = createSlice({
       })
       .addCase(getCaptureById.fulfilled, (state, action) => {
         state.loading = false;
-        state.captureInfoByID = action.payload;
+        state.captureInfoById = action.payload;
         state.captureInfoByIdSuccess = true;
       })
       .addCase(getCaptureById.rejected, (state, action) => {
