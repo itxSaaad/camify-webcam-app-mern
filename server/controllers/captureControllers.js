@@ -125,10 +125,27 @@ const deleteCapture = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Delete all Captured Images
+// @route   DELETE /api/captures/
+// @access  Private/Admin
+
+const deleteAllCaptures = asyncHandler(async (req, res) => {
+  const deletedCaptures = await Capture.deleteMany({});
+
+  if (deletedCaptures) {
+    res.status(201);
+    res.json({ message: 'All Captured Images Deleted!' });
+  } else {
+    res.status(404);
+    throw new Error('Captured Image Not Found!');
+  }
+});
+
 module.exports = {
   createCapture,
   getCaptureById,
   updateCaptureById,
   getAllCaptures,
   deleteCapture,
+  deleteAllCaptures,
 };

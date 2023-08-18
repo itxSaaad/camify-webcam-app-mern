@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 import AuthModal from '../components/ui/Auth/AuthModal';
+import Button from '../components/ui/Button';
 import Loader from '../components/ui/Loader';
 import Message from '../components/ui/Message';
 
-import { getCaptureById } from '../redux/thunks/captureThunks';
+import { getCaptureById, listCaptures } from '../redux/thunks/captureThunks';
 
 function GalleryScreen() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -18,7 +19,24 @@ function GalleryScreen() {
   const { userInfo } = user;
 
   const capture = useSelector((state) => state.capture);
-  const { loading, captureListError, captureList } = capture;
+  const {
+    loading,
+    captureListError,
+    captureList,
+    captureDeleteAllError,
+    captureDeleteAllSuccess,
+  } = capture;
+
+  const successMessageDeleteAll = captureDeleteAllSuccess && {
+    status: '200',
+    message: 'All Captures Deleted Successfully!',
+  };
+
+  useEffect(() => {
+    if (captureDeleteAllSuccess) {
+      dispatch(listCaptures({}));
+    }
+  }, [captureDeleteAllSuccess, dispatch]);
 
   return (
     <section className="bg-indigo-500 flex flex-col justify-center items-center min-h-screen p-10">
@@ -27,9 +45,35 @@ function GalleryScreen() {
           <Loader />
         ) : (
           <div className="bg-white w-11/12 rounded-lg shadow-lg p-4">
-            <h2 className="text-2xl font-bold">Your Media</h2>
+            <div className="flex flex-row justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold">Your Media</h2>
+                <p className="text-gray-600">
+                  You have{' '}
+                  <span className="font-bold">{captureList.length}</span> photos
+                </p>
+              </div>
+              {captureList.length > 0 && (
+                <Button
+                  variant="danger"
+                  type="button"
+                  className="mt-4 rounded-lg shadow-lg"
+                  onClick={() => dispatch(deleteAllCaptures({}))}
+                >
+                  Delete All Captures
+                </Button>
+              )}
+            </div>
 
-            {captureListError && <Message>{captureListError}</Message>}
+            {(captureListError ||
+              captureDeleteAllError ||
+              captureDeleteAllSuccess) && (
+              <Message>
+                {captureListError ||
+                  captureDeleteAllError ||
+                  successMessageDeleteAll}
+              </Message>
+            )}
 
             {captureList.length === 0 ? (
               <div className="flex flex-col justify-center items-center border-y-2 border-y-indigo-700 p-2 mt-4">

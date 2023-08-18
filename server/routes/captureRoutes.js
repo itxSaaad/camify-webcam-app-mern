@@ -14,6 +14,7 @@ const {
   updateCaptureById,
   getAllCaptures,
   deleteCapture,
+  deleteAllCaptures,
 } = require('../controllers/captureControllers');
 
 // Initialize Routes
@@ -25,7 +26,8 @@ const {
 router
   .route('/')
   .get(protect, getAllCaptures)
-  .post(protect, upload.single('image'), createCapture);
+  .post(protect, upload.single('image'), createCapture)
+  .delete(protect, deleteAllCaptures);
 
 router
   .route('/:id')

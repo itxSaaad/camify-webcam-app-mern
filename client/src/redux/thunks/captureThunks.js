@@ -135,7 +135,7 @@ export const listCaptures = createAsyncThunk(
   }
 );
 
-export const deleteCapture = createAsyncThunk(
+export const deleteCaptureById = createAsyncThunk(
   'capture/deleteCapture',
   async (id, { getState, rejectWithValue }) => {
     try {
@@ -153,6 +153,35 @@ export const deleteCapture = createAsyncThunk(
         `${serverUrl}/captures/${id}`,
         config
       );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
+
+export const deleteAllCaptures = createAsyncThunk(
+  'capture/deleteAllCaptures',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.delete(`${serverUrl}/captures`, config);
 
       return data;
     } catch (error) {

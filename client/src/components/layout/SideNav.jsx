@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { logout } from '../../redux/slices/userSlice';
-
 import Button from '../ui/Button';
 import AuthModal from '../ui/Auth/AuthModal';
+
+import { logout } from '../../redux/slices/userSlice';
+
 import { listCaptures } from '../../redux/thunks/captureThunks';
+import { detailsUser } from '../../redux/thunks/userThunks';
 
 const SideNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
-  // const latestImage = 'https://picsum.photos/200/300';
 
   const dispatch = useDispatch();
 
@@ -72,18 +72,21 @@ const SideNav = () => {
           {userInfo ? (
             <>
               <Link
-                to="/profile"
-                className="rounded-sm p-1 bg-gray-600 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                Profile
-              </Link>
-              <Link
                 to="/"
                 className="rounded-sm p-1 bg-gray-600 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1"
                 onClick={() => setIsOpen(!isOpen)}
               >
                 New Click
+              </Link>
+              <Link
+                to="/profile"
+                className="rounded-sm p-1 bg-gray-600 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1"
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                  dispatch(detailsUser({}));
+                }}
+              >
+                Profile
               </Link>
               <Button
                 className="bg-gray-900 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1 rounded-md"

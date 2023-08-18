@@ -19,10 +19,10 @@ function ProfileCard() {
   const { loading, detailsUserError, userDetails, userInfo } = user;
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && !userDetails) {
       dispatch(detailsUser({}));
     }
-  }, [dispatch, userInfo]);
+  }, [dispatch, userInfo, userDetails]);
 
   return (
     <aside className="bg-white sm:w-1/4 flex flex-col items-center justify-between rounded-lg shadow-lg p-4 mb-4 sm:mb-0">

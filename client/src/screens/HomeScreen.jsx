@@ -53,7 +53,7 @@ function HomeScreen() {
   }, [captureInfoSuccess, captureInfo, dispatch]);
 
   return (
-    <section className="h-screen bg-indigo-500 flex flex-col-reverse sm:flex-row justify-evenly items-center p-7 sm:pr-56 sm:pl-24">
+    <section className="h-screen bg-indigo-500 flex flex-col-reverse sm:flex-row justify-evenly items-center p-10">
       {userInfo ? (
         <>
           <button

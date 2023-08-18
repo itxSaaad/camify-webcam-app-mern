@@ -2,10 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import {
   createCapture,
+  deleteAllCaptures,
+  deleteCaptureById,
   getCaptureById,
-  updateCaptureById,
-  deleteCapture,
   listCaptures,
+  updateCaptureById,
 } from '../thunks/captureThunks';
 
 const initialState = {
@@ -16,12 +17,14 @@ const initialState = {
   captureInfoByIdError: null,
   captureListError: null,
   captureUpdateError: null,
-  captureDeleteError: null,
+  captureDeleteByIdError: null,
+  captureDeleteAllError: null,
   captureInfoSuccess: false,
   captureInfoByIdSuccess: false,
   captureListSuccess: false,
   captureUpdateSuccess: false,
-  captureDeleteSuccess: false,
+  captureDeleteByIdSuccess: false,
+  captureDeleteAllSuccess: false,
   loading: false,
 };
 
@@ -67,17 +70,17 @@ const captureSlice = createSlice({
         state.loading = false;
         state.captureUpdateError = action.payload;
       })
-      .addCase(deleteCapture.pending, (state) => {
+      .addCase(deleteCaptureById.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteCapture.fulfilled, (state, action) => {
+      .addCase(deleteCaptureById.fulfilled, (state, action) => {
         state.loading = false;
         state.captureInfo = action.payload;
-        state.captureDeleteSuccess = true;
+        state.captureDeleteByIdSuccess = true;
       })
-      .addCase(deleteCapture.rejected, (state, action) => {
+      .addCase(deleteCaptureById.rejected, (state, action) => {
         state.loading = false;
-        state.captureDeleteError = action.payload;
+        state.captureDeleteByIdError = action.payload;
       })
       .addCase(listCaptures.pending, (state) => {
         state.loading = true;
@@ -90,6 +93,18 @@ const captureSlice = createSlice({
       .addCase(listCaptures.rejected, (state, action) => {
         state.loading = false;
         state.captureListError = action.payload;
+      })
+      .addCase(deleteAllCaptures.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteAllCaptures.fulfilled, (state, action) => {
+        state.loading = false;
+        state.captureInfo = action.payload;
+        state.captureDeleteAllSuccess = true;
+      })
+      .addCase(deleteAllCaptures.rejected, (state, action) => {
+        state.loading = false;
+        state.captureDeleteAllError = action.payload;
       });
   },
 });
