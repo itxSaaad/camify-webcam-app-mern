@@ -136,3 +136,129 @@ export const detailsUser = createAsyncThunk(
     }
   }
 );
+
+export const getUserById = createAsyncThunk(
+  'user/getUserById',
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `${serverUrl}/users/profile/${id}`,
+        config
+      );
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
+
+export const listUsers = createAsyncThunk(
+  'user/listUsers',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(`${serverUrl}/users`, config);
+
+      return data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
+
+export const updateProfileByAdmin = createAsyncThunk(
+  'user/updateProfileByAdmin',
+  async ({ id, isAdmin }, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `${serverUrl}/users/profile/${id}`,
+        {
+          isAdmin,
+        },
+        config
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  'user/deleteUser',
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      await axios.delete(`${serverUrl}/users/${id}`, config);
+
+      return;
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
