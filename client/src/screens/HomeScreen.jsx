@@ -11,11 +11,12 @@ import Message from '../components/ui/Message';
 import { dataURLToBlob } from '../utils/imageUtils';
 
 import { createCapture, listCaptures } from '../redux/thunks/captureThunks';
+import Button from '../components/ui/Button';
 
 function HomeScreen() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [shutterClosed, setShutterClosed] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const webcamRef = useRef(null);
   const dispatch = useDispatch();
@@ -37,9 +38,7 @@ function HomeScreen() {
   }, [webcamRef, dispatch]);
 
   useEffect(() => {
-    if (!userInfo) {
-      setIsAuthModalOpen(true);
-    } else {
+    if (userInfo) {
       setIsAuthModalOpen(false);
     }
   }, [userInfo]);
@@ -96,25 +95,32 @@ function HomeScreen() {
           )}
         </>
       ) : (
-        <>
-          {isAuthModalOpen ? (
-            <AuthModal
-              onClose={() => {
-                setIsAuthModalOpen(false);
-              }}
-            />
-          ) : (
-            <div className="text-white text-center">
-              <h1 className="text-3xl text-indigo-100 font-bold mb-2">
-                Welcome to
-              </h1>
-              <h1 className="text-5xl font-bold mb-2">Camify</h1>
-              <p className="text-xl text-indigo-300 font-medium mb-2">
-                Login to capture your moments!
-              </p>
-            </div>
-          )}
-        </>
+        <div className="text-white text-center">
+          <h1 className="text-3xl text-indigo-100 font-bold mb-2">
+            Welcome to
+          </h1>
+          <h1 className="text-5xl font-bold mb-2">Camify</h1>
+          <p className="text-xl text-indigo-300 font-medium mb-2">
+            Login to capture your moments!
+          </p>
+          <Button
+            variant="outline"
+            className="rounded-lg shadow-lg"
+            onClick={() => {
+              setIsAuthModalOpen(true);
+            }}
+          >
+            Login / Register
+          </Button>
+        </div>
+      )}
+
+      {isAuthModalOpen && (
+        <AuthModal
+          onClose={() => {
+            setIsAuthModalOpen(false);
+          }}
+        />
       )}
     </section>
   );
