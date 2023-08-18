@@ -13,6 +13,7 @@ import HomeScreen from './screens/HomeScreen.jsx';
 import ProfileScreen from './screens/ProfileScreen.jsx';
 import GalleryScreen from './screens/GalleryScreen.jsx';
 import ImageScreen from './screens/ImageScreen.jsx';
+import DashboardScreen from './screens/DashboardScreen.jsx';
 
 const router = createBrowserRouter([
   {
@@ -31,13 +32,16 @@ const router = createBrowserRouter([
       {
         path: '/gallery',
         element: <GalleryScreen />,
-      },
-      {
-        path: '/gallery/:id',
-        element: <ImageScreen />,
+        children: [
+          {
+            path: '/gallery/:id',
+            element: <ImageScreen />,
+          },
+        ],
       },
       {
         path: '/admin/dashboard',
+        element: <DashboardScreen />,
       },
     ],
   },

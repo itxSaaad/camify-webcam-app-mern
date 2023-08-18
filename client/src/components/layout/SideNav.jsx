@@ -88,6 +88,16 @@ const SideNav = () => {
               >
                 Profile
               </Link>
+
+              {userInfo?.isAdmin && (
+                <Link
+                  to="/admin/dashboard"
+                  className="rounded-sm p-1 bg-gray-600 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  Dashboard
+                </Link>
+              )}
               <Button
                 className="bg-gray-900 border-2 border-transparent hover:bg-gray-800 hover:border-gray-500 m-1 rounded-md"
                 onClick={logoutHandler}
