@@ -12,8 +12,10 @@ const {
   createCapture,
   getCaptureById,
   updateCaptureById,
+  deleteCaptureById,
+  getCapturesByUserId,
+  deleteCapturesByUserId,
   getAllCaptures,
-  deleteCapture,
   deleteAllCaptures,
 } = require('../controllers/captureControllers');
 
@@ -23,19 +25,25 @@ const {
 
 // Private Routes
 
-router
-  .route('/')
-  .get(protect, getAllCaptures)
-  .post(protect, upload.single('image'), createCapture)
-  .delete(protect, deleteAllCaptures);
+router.route('/').post(protect, upload.single('image'), createCapture);
 
 router
   .route('/:id')
   .get(protect, getCaptureById)
   .put(protect, updateCaptureById)
-  .delete(protect, deleteCapture);
+  .delete(protect, deleteCaptureById);
+
+router
+  .route('/user/:id')
+  .get(protect, getCapturesByUserId)
+  .delete(protect, deleteCapturesByUserId);
 
 // Admin + Private Routes
+
+router
+  .route('/')
+  .get(protect, admin, getAllCaptures)
+  .delete(protect, admin, deleteAllCaptures);
 
 // Export Router
 module.exports = router;

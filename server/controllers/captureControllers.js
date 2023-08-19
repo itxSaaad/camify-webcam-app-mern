@@ -94,12 +94,28 @@ const updateCaptureById = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get all Captured Images
-// @route   GET /api/captures/
-// @access  Private/Admin
+// @desc    Delete Captured Image by ID
+// @route   DELETE /api/captures/:id
+// @access  Private
 
-const getAllCaptures = asyncHandler(async (req, res) => {
-  const captures = await Capture.find({});
+const deleteCaptureById = asyncHandler(async (req, res) => {
+  const deletedCapture = await Capture.findByIdAndDelete(req.params.id);
+
+  if (deletedCapture) {
+    res.status(201);
+    res.json({ message: 'Captured Image Deleted!' });
+  } else {
+    res.status(404);
+    throw new Error('Captured Image Not Found!');
+  }
+});
+
+// @desc   Get all Captured Images by User ID
+// @route   GET /api/captures/user/:id
+// @access  Private
+
+const getCapturesByUserId = asyncHandler(async (req, res) => {
+  const captures = await Capture.find({ user: req.params.id });
 
   if (captures) {
     res.json(captures);
@@ -109,16 +125,31 @@ const getAllCaptures = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Delete Captured Image
-// @route   DELETE /api/captures/:id
+// @desc    Delete All Captured Images by User ID
+// @route   DELETE /api/captures/user/:id
+// @access  Private
+
+const deleteCapturesByUserId = asyncHandler(async (req, res) => {
+  const deletedCaptures = await Capture.deleteMany({ user: req.params.id });
+
+  if (deletedCaptures) {
+    res.status(201);
+    res.json({ message: 'All Captured Images Deleted!' });
+  } else {
+    res.status(404);
+    throw new Error('Captured Image Not Found!');
+  }
+});
+
+// @desc    Get all Captured Images
+// @route   GET /api/captures/
 // @access  Private/Admin
 
-const deleteCapture = asyncHandler(async (req, res) => {
-  const deletedCapture = await Capture.findByIdAndDelete(req.params.id);
+const getAllCaptures = asyncHandler(async (req, res) => {
+  const captures = await Capture.find({});
 
-  if (deletedCapture) {
-    res.status(201);
-    res.json({ message: 'Captured Image Deleted!' });
+  if (captures) {
+    res.json(captures);
   } else {
     res.status(404);
     throw new Error('Captured Image Not Found!');
@@ -145,7 +176,9 @@ module.exports = {
   createCapture,
   getCaptureById,
   updateCaptureById,
+  deleteCaptureById,
+  getCapturesByUserId,
+  deleteCapturesByUserId,
   getAllCaptures,
-  deleteCapture,
   deleteAllCaptures,
 };
