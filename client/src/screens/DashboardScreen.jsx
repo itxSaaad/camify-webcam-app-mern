@@ -58,7 +58,7 @@ function DashboardScreen() {
   };
 
   return (
-    <section className="h-screen flex flex-row items-center justify-center bg-indigo-600 text-white">
+    <section className="min-h-screen flex flex-row items-center justify-center bg-indigo-600 text-white">
       {!userInfo ? (
         <AuthModal
           onClose={() => {

@@ -32,12 +32,10 @@ const router = createBrowserRouter([
       {
         path: '/gallery',
         element: <GalleryScreen />,
-        children: [
-          {
-            path: '/gallery/:id',
-            element: <ImageScreen />,
-          },
-        ],
+      },
+      {
+        path: '/gallery/:id',
+        element: <ImageScreen />,
       },
       {
         path: '/admin/dashboard',

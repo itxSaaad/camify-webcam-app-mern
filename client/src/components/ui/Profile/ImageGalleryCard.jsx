@@ -1,15 +1,14 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import Button from '../Button';
 import Loader from '../Loader';
 import Message from '../Message';
-import Button from '../Button';
 
 import ImageList from './ImageList';
 
 import {
-  deleteAllCaptures,
-  listCaptures,
+  deleteCapturesByUserId,
+  listCapturesByUserId,
 } from '../../../redux/thunks/captureThunks';
 
 function ImageGalleryCard() {
@@ -18,27 +17,27 @@ function ImageGalleryCard() {
   const capture = useSelector((state) => state.capture);
   const {
     loading,
-    captureListError,
-    captureList,
-    captureDeleteAllError,
-    captureDeleteAllSuccess,
+    captureListByUserIdError,
+    captureListByUserId,
+    captureDeleteByUserIdError,
+    captureDeleteByUserIdSuccess,
   } = capture;
 
-  const successMessageDeleteAll = captureDeleteAllSuccess && {
+  const successMessageDeleteAll = captureDeleteByUserIdSuccess && {
     status: '200',
     message: 'All Captures Deleted Successfully!',
   };
 
   let latestImage = '';
-  if (captureList && captureList.length > 0) {
-    latestImage = captureList[captureList.length - 1];
+  if (captureListByUserId && captureListByUserId.length > 0) {
+    latestImage = captureListByUserId[captureListByUserId.length - 1];
   }
 
-  useEffect(() => {
-    if (captureDeleteAllSuccess) {
-      dispatch(listCaptures({}));
-    }
-  }, [captureDeleteAllSuccess, dispatch]);
+  const handleDeleteAllCaptures = () => {
+    dispatch(deleteCapturesByUserId({})).then(() => {
+      dispatch(listCapturesByUserId({}));
+    });
+  };
 
   return (
     <aside className="bg-white w-full sm:w-3/4 rounded-lg shadow-lg p-4 sm:ml-4">
@@ -46,33 +45,36 @@ function ImageGalleryCard() {
         <div>
           <h2 className="text-2xl font-bold">Photos</h2>
           <p className="text-gray-600">
-            You have <span className="font-bold">{captureList.length}</span>{' '}
+            You have{' '}
+            <span className="font-bold">{captureListByUserId.length}</span>{' '}
             photos
           </p>
         </div>
-        {captureList.length > 0 && (
+        {captureListByUserId.length > 0 && (
           <Button
             variant="danger"
             type="button"
             className="mt-4 rounded-lg shadow-lg"
-            onClick={() => dispatch(deleteAllCaptures({}))}
+            onClick={handleDeleteAllCaptures}
           >
             Delete All Captures
           </Button>
         )}
       </div>
 
-      {(captureListError ||
-        captureDeleteAllError ||
-        captureDeleteAllSuccess) && (
+      {(captureListByUserIdError ||
+        captureDeleteByUserIdError ||
+        captureDeleteByUserIdSuccess) && (
         <Message>
-          {captureListError || captureDeleteAllError || successMessageDeleteAll}
+          {captureListByUserIdError ||
+            captureDeleteByUserIdError ||
+            successMessageDeleteAll}
         </Message>
       )}
 
       {loading ? (
         <Loader />
-      ) : captureList.length === 0 ? (
+      ) : captureListByUserId.length === 0 ? (
         <div className="flex flex-col justify-center items-center border-y-2 border-y-indigo-700 p-2 mt-4">
           <h2 className="text-2xl font-bold">No Media</h2>
           <p className="text-lg text-gray-500">
@@ -93,7 +95,7 @@ function ImageGalleryCard() {
             </span>
           </p>
 
-          <ImageList gallery={captureList} />
+          <ImageList gallery={captureListByUserId} />
         </>
       )}
     </aside>

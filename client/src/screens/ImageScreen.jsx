@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,7 +8,10 @@ import Button from '../components/ui/Button';
 import Loader from '../components/ui/Loader';
 import Message from '../components/ui/Message';
 
-import { deleteCaptureById, listCaptures } from '../redux/thunks/captureThunks';
+import {
+  deleteCaptureById,
+  listCapturesByUserId,
+} from '../redux/thunks/captureThunks';
 
 function ImageScreen() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -33,11 +36,12 @@ function ImageScreen() {
     message: 'Capture Deleted Successfully!',
   };
 
-  useEffect(() => {
-    if (captureDeleteByIdSuccess) {
-      dispatch(listCaptures({}));
-    }
-  }, [captureDeleteByIdSuccess, dispatch]);
+  const handleDeleteCaptureById = () => {
+    dispatch(deleteCaptureById(captureInfoById._id)).then(() => {
+      dispatch(listCapturesByUserId({}));
+      navigate('/gallery');
+    });
+  };
 
   return (
     <section className="bg-indigo-500 flex flex-col justify-center items-center min-h-screen p-10">
@@ -76,11 +80,7 @@ function ImageScreen() {
               variant="danger"
               type="button"
               className="absolute top-2 right-6 rounded-lg shadow-lg"
-              onClick={() => {
-                dispatch(deleteCaptureById(captureInfoById._id)).then(() => {
-                  navigate('/gallery');
-                });
-              }}
+              onClick={handleDeleteCaptureById}
             >
               Delete
             </Button>

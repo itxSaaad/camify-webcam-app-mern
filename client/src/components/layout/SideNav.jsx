@@ -7,7 +7,7 @@ import AuthModal from '../ui/Auth/AuthModal';
 
 import { logout } from '../../redux/slices/userSlice';
 
-import { listCaptures } from '../../redux/thunks/captureThunks';
+import { listCapturesByUserId } from '../../redux/thunks/captureThunks';
 import { detailsUser } from '../../redux/thunks/userThunks';
 
 const SideNav = () => {
@@ -20,16 +20,16 @@ const SideNav = () => {
   const { userInfo } = user;
 
   const capture = useSelector((state) => state.capture);
-  const { captureList } = capture;
+  const { captureListByUserId } = capture;
 
   let latestImage = '';
-  if (captureList && captureList.length > 0) {
-    latestImage = captureList[captureList.length - 1];
+  if (captureListByUserId && captureListByUserId.length > 0) {
+    latestImage = captureListByUserId[captureListByUserId.length - 1];
   }
 
   useEffect(() => {
     if (userInfo) {
-      dispatch(listCaptures({}));
+      dispatch(listCapturesByUserId({}));
     }
   }, [dispatch, userInfo]);
 
@@ -84,6 +84,7 @@ const SideNav = () => {
                 onClick={() => {
                   setIsOpen(!isOpen);
                   dispatch(detailsUser({}));
+                  dispatch(listCapturesByUserId({}));
                 }}
               >
                 Profile

@@ -10,7 +10,10 @@ import Message from '../components/ui/Message';
 
 import { dataURLToBlob } from '../utils/imageUtils';
 
-import { createCapture, listCaptures } from '../redux/thunks/captureThunks';
+import {
+  createCapture,
+  listCapturesByUserId,
+} from '../redux/thunks/captureThunks';
 import Button from '../components/ui/Button';
 
 function HomeScreen() {
@@ -46,7 +49,7 @@ function HomeScreen() {
   useEffect(() => {
     if (captureInfoSuccess) {
       setCapturedImage(captureInfo?.imageUrl);
-      dispatch(listCaptures({}));
+      dispatch(listCapturesByUserId({}));
       setShutterClosed(false);
     }
   }, [captureInfoSuccess, captureInfo, dispatch]);

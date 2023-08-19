@@ -17,7 +17,7 @@ function MainContent({ activeMenuItem, collapsible, onToggleSidebar }) {
 
   return (
     <div
-      className={`bg-indigo-600 h-screen ${
+      className={`bg-indigo-600 min-h-screen ${
         collapsible ? 'w-10/12' : 'w-full'
       } transition-width duration-300 ease-in-out p-10`}
     >

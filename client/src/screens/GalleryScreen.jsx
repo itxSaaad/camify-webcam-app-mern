@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -7,7 +7,11 @@ import Button from '../components/ui/Button';
 import Loader from '../components/ui/Loader';
 import Message from '../components/ui/Message';
 
-import { getCaptureById, listCaptures } from '../redux/thunks/captureThunks';
+import {
+  deleteCapturesByUserId,
+  getCaptureById,
+  listCapturesByUserId,
+} from '../redux/thunks/captureThunks';
 
 function GalleryScreen() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -21,22 +25,22 @@ function GalleryScreen() {
   const capture = useSelector((state) => state.capture);
   const {
     loading,
-    captureListError,
-    captureList,
-    captureDeleteAllError,
-    captureDeleteAllSuccess,
+    captureListByUserIdError,
+    captureListByUserId,
+    captureDeleteByUserIdError,
+    captureDeleteByUserIdSuccess,
   } = capture;
 
-  const successMessageDeleteAll = captureDeleteAllSuccess && {
+  const successMessageDeleteAll = captureDeleteByUserIdSuccess && {
     status: '200',
     message: 'All Captures Deleted Successfully!',
   };
 
-  useEffect(() => {
-    if (captureDeleteAllSuccess) {
-      dispatch(listCaptures({}));
-    }
-  }, [captureDeleteAllSuccess, dispatch]);
+  const handleDeleteCaptureByUserId = () => {
+    dispatch(deleteCapturesByUserId({})).then(() => {
+      dispatch(listCapturesByUserId({}));
+    });
+  };
 
   return (
     <section className="bg-indigo-500 flex flex-col justify-center items-center min-h-screen p-10">
@@ -50,32 +54,35 @@ function GalleryScreen() {
                 <h2 className="text-2xl font-bold">Your Media</h2>
                 <p className="text-gray-600">
                   You have{' '}
-                  <span className="font-bold">{captureList.length}</span> photos
+                  <span className="font-bold">
+                    {captureListByUserId.length}
+                  </span>{' '}
+                  photos
                 </p>
               </div>
-              {captureList.length > 0 && (
+              {captureListByUserId.length > 0 && (
                 <Button
                   variant="danger"
                   type="button"
                   className="mt-4 rounded-lg shadow-lg"
-                  onClick={() => dispatch(deleteAllCaptures({}))}
+                  onClick={handleDeleteCaptureByUserId}
                 >
                   Delete All Captures
                 </Button>
               )}
             </div>
 
-            {(captureListError ||
-              captureDeleteAllError ||
-              captureDeleteAllSuccess) && (
+            {(captureListByUserIdError ||
+              captureDeleteByUserIdError ||
+              captureDeleteByUserIdSuccess) && (
               <Message>
-                {captureListError ||
-                  captureDeleteAllError ||
+                {captureListByUserIdError ||
+                  captureDeleteByUserIdError ||
                   successMessageDeleteAll}
               </Message>
             )}
 
-            {captureList.length === 0 ? (
+            {captureListByUserId.length === 0 ? (
               <div className="flex flex-col justify-center items-center border-y-2 border-y-indigo-700 p-2 mt-4">
                 <h2 className="text-2xl font-bold">No Media</h2>
                 <p className="text-lg text-gray-500">
@@ -84,7 +91,7 @@ function GalleryScreen() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-6 gap-4 mt-4">
-                {captureList.map((image) => (
+                {captureListByUserId.map((image) => (
                   <div
                     key={image._id}
                     className="relative overflow-hidden rounded-lg"
