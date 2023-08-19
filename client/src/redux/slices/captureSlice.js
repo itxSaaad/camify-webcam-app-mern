@@ -7,23 +7,30 @@ import {
   getCaptureById,
   listCaptures,
   updateCaptureById,
+  listCapturesByUserId,
+  deleteCapturesByUserId,
 } from '../thunks/captureThunks';
 
 const initialState = {
   captureInfo: null,
   captureInfoById: null,
   captureList: [],
+  captureListByUserId: [],
   captureInfoError: null,
   captureInfoByIdError: null,
-  captureListError: null,
-  captureUpdateError: null,
+  captureUpdateByIdError: null,
   captureDeleteByIdError: null,
+  captureListByUserIdError: null,
+  captureDeleteAllByUserIdError: null,
+  captureListError: null,
   captureDeleteAllError: null,
   captureInfoSuccess: false,
   captureInfoByIdSuccess: false,
-  captureListSuccess: false,
-  captureUpdateSuccess: false,
+  captureUpdateByIdSuccess: false,
   captureDeleteByIdSuccess: false,
+  captureListByUserIdSuccess: false,
+  captureDeleteAllByUserIdSuccess: false,
+  captureListSuccess: false,
   captureDeleteAllSuccess: false,
   loading: false,
 };
@@ -64,11 +71,11 @@ const captureSlice = createSlice({
       .addCase(updateCaptureById.fulfilled, (state, action) => {
         state.loading = false;
         state.captureInfo = action.payload;
-        state.captureUpdateSuccess = true;
+        state.captureUpdateByIdSuccess = true;
       })
       .addCase(updateCaptureById.rejected, (state, action) => {
         state.loading = false;
-        state.captureUpdateError = action.payload;
+        state.captureUpdateByIdError = action.payload;
       })
       .addCase(deleteCaptureById.pending, (state) => {
         state.loading = true;
@@ -81,6 +88,29 @@ const captureSlice = createSlice({
       .addCase(deleteCaptureById.rejected, (state, action) => {
         state.loading = false;
         state.captureDeleteByIdError = action.payload;
+      })
+      .addCase(listCapturesByUserId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listCapturesByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.captureListByUserId = action.payload;
+        state.captureListByUserIdSuccess = true;
+      })
+      .addCase(listCapturesByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.captureListByUserIdError = action.payload;
+      })
+      .addCase(deleteCapturesByUserId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteCapturesByUserId.fulfilled, (state) => {
+        state.loading = false;
+        state.captureDeleteAllByUserIdSuccess = true;
+      })
+      .addCase(deleteCapturesByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.captureDeleteAllByUserIdError = action.payload;
       })
       .addCase(listCaptures.pending, (state) => {
         state.loading = true;

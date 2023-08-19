@@ -106,37 +106,8 @@ export const updateCaptureById = createAsyncThunk(
   }
 );
 
-export const listCaptures = createAsyncThunk(
-  'capture/listCaptures',
-  async (_, { getState, rejectWithValue }) => {
-    const {
-      user: { userInfo },
-    } = getState();
-
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const { data } = await axios.get(`${serverUrl}/captures`, config);
-
-      return data;
-    } catch (error) {
-      return rejectWithValue({
-        status: error.response && error.response.status,
-        message:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  }
-);
-
 export const deleteCaptureById = createAsyncThunk(
-  'capture/deleteCapture',
+  'capture/deleteCaptureById',
   async (id, { getState, rejectWithValue }) => {
     try {
       const {
@@ -153,6 +124,99 @@ export const deleteCaptureById = createAsyncThunk(
         `${serverUrl}/captures/${id}`,
         config
       );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
+
+export const listCapturesByUserId = createAsyncThunk(
+  'capture/listCapturesByUserId',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `${serverUrl}/captures/user/${userInfo._id}`,
+        config
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
+
+export const deleteCapturesByUserId = createAsyncThunk(
+  'capture/deleteCapturesByUserId',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.delete(
+        `${serverUrl}/captures/user/${userInfo._id}`,
+        config
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response && error.response.status,
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  }
+);
+
+export const listCaptures = createAsyncThunk(
+  'capture/listCaptures',
+  async (_, { getState, rejectWithValue }) => {
+    const {
+      user: { userInfo },
+    } = getState();
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get(`${serverUrl}/captures`, config);
 
       return data;
     } catch (error) {
