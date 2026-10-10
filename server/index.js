@@ -42,6 +42,10 @@ app.get('/', (req, res) => {
   res.send('API Is Runnig Perfectly!');
 });
 
+app.get(['/api', '/api/health'], (req, res) => {
+  res.status(200).json({ service: 'camify-api', status: 'ok' });
+});
+
 app.use('/api/users', userRoutes);
 app.use('/api/captures', captureRoutes);
 
