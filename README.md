@@ -1,5 +1,19 @@
 # Camify - Your Creative Webcam Experience
 
+## Architecture
+
+```mermaid
+flowchart LR
+  User -->|open camera, apply effects, capture or share| Client[React webcam and media interface\nVercel Services: frontend]
+  Camera[Device camera permission and stream] --> Client
+  Client -->|HTTP API requests| API[Express and Node.js backend\nVercel Services: frontend-backend]
+  API --> DB[(Application database)]
+  DB --> API
+  API --> Client
+  Client --> Media[Filtered capture and sharing]
+  Media --> User
+```
+
 > Camify WebCam is a web application built using the MERN (MongoDB, Express.js, React.js, Node.js) stack. It is a dynamic web application that brings your webcam to life, allowing you to capture moments, apply artistic filters, and seamlessly share your media with friends and family. Elevate your webcam experience to a new level of fun and expression.
 
 <br />
@@ -134,3 +148,8 @@ Give ⭐️ if you like this project!
 [issues-url]: https://github.com/itxSaaad/camify-webcam-app-mern/issues
 [license-shield]: https://img.shields.io/github/license/itxSaaad/camify-webcam-app-mern.svg?style=for-the-badge
 [license-url]: https://github.com/itxSaaad/camify-webcam-app-mern/blob/main/LICENSE.md
+
+## Vercel Deployment
+React client client/ + Express API server/index.js. Set Vercel framework to Services, VITE_SERVER_URL to this origin plus /api, and provide MongoDB/Cloudinary settings in Vercel environment variables.
+See the repository-root [vercel.json](./vercel.json) for build roots and routing. Configure private values in Vercel Project Settings; never commit secrets.
+
